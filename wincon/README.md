@@ -6,8 +6,16 @@ Microsoft Windows console. Although historically called "Win32", this
 port can just as easily be built for 64-bit systems. Windows 95 through
 Windows 10 are covered. (Some features require later versions.)
 
+Building from Visual Studio 2017
+--------
 
-Building
+- open the solution file vs2017\PDCurses.sln
+
+- pick your configuration and build
+
+This will build **PDCurses.lib** static library and the curses demo console application **tuidemo.exe**.
+
+Building from the command line
 --------
 
 - Choose the appropriate makefile for your compiler:
