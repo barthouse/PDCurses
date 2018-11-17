@@ -120,6 +120,18 @@ static HWND _find_console_handle(void)
 
 #define WM_SETCONSOLEINFO (WM_USER + 201)
 
+static BOOL _is_windows_nt_or_newer()
+{
+	OSVERSIONINFOEX osvi = { 0 };
+	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+	osvi.dwMajorVersion = 5;
+	osvi.dwMinorVersion = 0;
+	DWORDLONG dwlConditionMask = 0;
+	VER_SET_CONDITION(dwlConditionMask, VER_MAJORVERSION, VER_GREATER_EQUAL);
+	VER_SET_CONDITION(dwlConditionMask, VER_MINORVERSION, VER_GREATER_EQUAL);
+	return VerifyVersionInfo(&osvi, VER_MAJORVERSION | VER_MINORVERSION, dwlConditionMask);
+}
+
 /* Wrapper around WM_SETCONSOLEINFO. We need to create the necessary
    section (file-mapping) object in the context of the process which
    owns the console, before posting the message. Originally by JB. */
@@ -391,7 +403,7 @@ int PDC_scr_open(int argc, char **argv)
         exit(1);
     }
 
-    is_nt = !(GetVersion() & 0x80000000);
+    is_nt = _is_windows_nt_or_newer();
 
     str = getenv("ConEmuANSI");
     pdc_conemu = !!str;
